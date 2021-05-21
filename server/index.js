@@ -2,7 +2,7 @@ const express = require('express');
 const socketio = require('socket.io');
 const http = require('http');
 
-const {addUser,removeUser,getUser,getUsersInRoom} = require ('./users.js')
+const { addUser,removeUser,getUser,getUsersInRoom } = require ('./users.js')
 
 const PORT = process.env.PORT || 5000;
 
@@ -14,13 +14,14 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 io.on('connect', (socket) => {
-    socket.on('join', ({name,room}, callback) => {
-        const {error, user } = addUser({ id: socke.id, name, room});
+    
+    socket.on('join', ({ name,room }, callback) => {
+        const { error, user } = addUser({ id: socke.id, name, room });
 
         if(error) return Callback (error);
 
-        socket.emit ('message' , {user:'admin', text: `${user.name}, welcome to the room ${user.room}` });
-        socket.broadcast.to(user.room).emit('message', {user:'admin', text: `${user.name}, has joined`});
+        socket.emit ('message' , { user:'admin', text: `${user.name}, welcome to the room ${user.room}` });
+        socket.broadcast.to(user.room).emit('message', { user:'admin', text: `${user.name}, has joined` });
 
         socket.join(user.room);
 
@@ -38,6 +39,7 @@ io.on('connect', (socket) => {
     socket.on('disconnect', () => {
         console.log('user had left!!')
     });
+    
 });
 
 app.use(router);
