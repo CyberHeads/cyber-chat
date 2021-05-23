@@ -11,12 +11,17 @@ const { Socket } = require('dgram');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+const io = require("socket.io")(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
 
 io.on('connect', (socket) => {
     
     socket.on('join', ({ name,room }, callback) => {
-        const { error, user } = addUser({ id: socke.id, name, room });
+        const { error, user } = addUser({ id: socket.id, name, room });
 
         if(error) return Callback (error);
 
